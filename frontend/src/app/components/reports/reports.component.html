@@ -1,0 +1,14 @@
+<div class="container">
+    <h2>Financial Reports</h2>
+
+    <div class="actions">
+        <button (click)="getRevenue('monthly')">Monthly Revenue</button>
+        <button (click)="getRevenue('quarterly')">Quarterly Revenue</button>
+        <button (click)="getRevenue('yearly')">Yearly Revenue</button>
+    </div>
+
+    <div class="result" *ngIf="revenue !== null">
+        <h3>{{ currentPeriod | titlecase }} Revenue</h3>
+        <p class="amount">{{ revenue | currency:'INR' }}</p>
+    </div>
+</div>

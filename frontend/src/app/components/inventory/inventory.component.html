@@ -1,0 +1,37 @@
+<div class="container">
+    <h2>Inventory Management</h2>
+
+    <div class="add-product-form">
+        <h3>Add / Update Product</h3>
+        <input type="text" placeholder="Name (e.g. Ponni Rice)" [(ngModel)]="newProduct.name">
+        <input type="text" placeholder="Brand" [(ngModel)]="newProduct.brand">
+        <input type="number" placeholder="Quantity (Bags)" [(ngModel)]="newProduct.quantity">
+        <input type="number" placeholder="Price per Bag" [(ngModel)]="newProduct.price">
+        <input type="text" placeholder="Description" [(ngModel)]="newProduct.description">
+        <button (click)="addProduct()">Add to Inventory</button>
+    </div>
+
+    <h3>Current Stock</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Brand</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let product of products">
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.brand }}</td>
+                <td>{{ product.quantity }}</td>
+                <td>{{ product.price | currency:'INR' }}</td>
+                <td>{{ product.description }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

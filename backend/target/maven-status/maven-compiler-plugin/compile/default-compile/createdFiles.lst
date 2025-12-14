@@ -1,0 +1,17 @@
+com\ricestore\dto\SaleRequest.class
+com\ricestore\model\Product.class
+com\ricestore\model\Customer.class
+com\ricestore\repository\SaleRepository.class
+com\ricestore\dto\SaleItemRequest.class
+com\ricestore\RiceStoreApplication.class
+com\ricestore\controller\ReportController.class
+com\ricestore\repository\ProductRepository.class
+com\ricestore\controller\SalesController.class
+com\ricestore\service\ReportService.class
+com\ricestore\model\Sale.class
+com\ricestore\service\SalesService.class
+com\ricestore\repository\CustomerRepository.class
+com\ricestore\controller\CustomerController.class
+com\ricestore\model\SaleItem.class
+com\ricestore\controller\InventoryController.class
+com\ricestore\service\InventoryService.class

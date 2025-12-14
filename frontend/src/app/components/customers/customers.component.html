@@ -1,0 +1,34 @@
+<div class="container">
+    <h2>Customer Management</h2>
+
+    <div class="add-customer-form">
+        <h3>Add Customer</h3>
+        <input type="text" placeholder="Name" [(ngModel)]="newCustomer.name">
+        <input type="text" placeholder="Phone" [(ngModel)]="newCustomer.phone">
+        <input type="text" placeholder="Address" [(ngModel)]="newCustomer.address">
+        <button (click)="addCustomer()">Add Customer</button>
+    </div>
+
+    <h3>Customer List</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Total Debt</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let customer of customers">
+                <td>{{ customer.id }}</td>
+                <td>{{ customer.name }}</td>
+                <td>{{ customer.phone }}</td>
+                <td>{{ customer.address }}</td>
+                <td [style.color]="customer.totalDebt > 0 ? 'red' : 'black'">{{ customer.totalDebt | currency:'INR' }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

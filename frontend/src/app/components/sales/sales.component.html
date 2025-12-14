@@ -1,0 +1,60 @@
+<div class="container">
+    <h2>New Sale</h2>
+
+    <div class="sale-form">
+        <div class="form-group">
+            <label>Customer:</label>
+            <select [(ngModel)]="selectedCustomerId">
+                <option [ngValue]="null">Select Customer</option>
+                <option *ngFor="let c of customers" [value]="c.id">{{ c.name }}</option>
+            </select>
+        </div>
+
+        <div class="add-item-box">
+            <h3>Add Item</h3>
+            <select [(ngModel)]="selectedProductId">
+                <option [ngValue]="null">Select Product</option>
+                <option *ngFor="let p of products" [value]="p.id">{{ p.name }} - {{ p.brand }} (Stock: {{ p.quantity }})
+                </option>
+            </select>
+            <input type="number" [(ngModel)]="selectedQuantity" min="1" placeholder="Qty">
+            <button (click)="addToCart()">Add</button>
+        </div>
+
+        <h3>Cart</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of cartItems">
+                    <td>{{ item.product.name }} - {{ item.product.brand }}</td>
+                    <td>{{ item.product.price | currency:'INR' }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.total | currency:'INR' }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="totals">
+            <p>Total: {{ totalAmount | currency:'INR' }}</p>
+            <div class="form-group">
+                <label>Discount:</label>
+                <input type="number" [(ngModel)]="discount">
+            </div>
+            <p>Final Amount: {{ finalAmount | currency:'INR' }}</p>
+            <div class="form-group">
+                <label>Paid Amount:</label>
+                <input type="number" [(ngModel)]="paidAmount">
+            </div>
+            <p>Balance (Debt): {{ balance | currency:'INR' }}</p>
+
+            <button class="submit-btn" (click)="submitSale()">Complete Sale</button>
+        </div>
+    </div>
+</div>

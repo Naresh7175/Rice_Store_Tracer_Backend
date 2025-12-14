@@ -1,0 +1,28 @@
+.container {
+    padding: 20px;
+    text-align: center;
+}
+
+.actions {
+    margin-bottom: 30px;
+}
+
+button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.result {
+    background: #e3f2fd;
+    padding: 30px;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+.amount {
+    font-size: 32px;
+    font-weight: bold;
+    color: #1976d2;
+}
