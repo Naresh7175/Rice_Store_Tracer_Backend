@@ -3,6 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService, Customer, Product, SaleRequest, SaleItemRequest } from '../../services/api.service';
 
+export interface ProductViewModel extends Product {
+    selQuantity: number;
+    selUnit: string;
+}
+
 @Component({
     selector: 'app-sales',
     standalone: true,
@@ -12,16 +17,12 @@ import { ApiService, Customer, Product, SaleRequest, SaleItemRequest } from '../
 })
 export class SalesComponent implements OnInit {
     customers: Customer[] = [];
-    products: Product[] = [];
+    products: ProductViewModel[] = [];
 
     selectedCustomerId: number | null = null;
 
-    // Current Item being added
-    selectedProductId: number | null = null;
-    selectedQuantity: number = 1;
-
     // Cart
-    cartItems: { product: Product, quantity: number, total: number }[] = [];
+    cartItems: { product: Product, quantity: number, unit: string, price: number, total: number }[] = [];
 
     discount: number = 0;
     paidAmount: number = 0;
@@ -30,28 +31,42 @@ export class SalesComponent implements OnInit {
 
     ngOnInit(): void {
         this.apiService.getCustomers().subscribe(data => this.customers = data);
-        this.apiService.getProducts().subscribe(data => this.products = data);
+        this.apiService.getProducts().subscribe(data => {
+            this.products = data.map(p => ({
+                ...p,
+                selQuantity: 0,
+                selUnit: 'BAG'
+            }));
+        });
     }
 
-    addToCart() {
-        if (this.selectedProductId && this.selectedQuantity > 0) {
-            const product = this.products.find(p => p.id == this.selectedProductId);
-            if (product) {
-                if (product.quantity < this.selectedQuantity) {
-                    alert('Insufficient Stock!');
-                    return;
-                }
+    addToCart(item: ProductViewModel) {
+        if (item.selQuantity > 0) {
+            // Determine price based on unit
+            let price = item.price;
+            let quantityToCheck = item.selQuantity;
 
-                this.cartItems.push({
-                    product: product,
-                    quantity: this.selectedQuantity,
-                    total: product.price * this.selectedQuantity
-                });
-
-                // Reset selection
-                this.selectedProductId = null;
-                this.selectedQuantity = 1;
+            if (item.selUnit === 'KG') {
+                price = item.price / 26.0;
+                quantityToCheck = item.selQuantity / 26.0;
             }
+
+            if (item.quantity < quantityToCheck) {
+                alert('Insufficient Stock for ' + item.name);
+                return;
+            }
+
+            this.cartItems.push({
+                product: item,
+                quantity: item.selQuantity,
+                unit: item.selUnit,
+                price: price,
+                total: price * item.selQuantity
+            });
+
+            // Reset selection for this item
+            item.selQuantity = 0;
+            item.selUnit = 'BAG';
         }
     }
 
@@ -81,7 +96,8 @@ export class SalesComponent implements OnInit {
             customerId: this.selectedCustomerId,
             items: this.cartItems.map(item => ({
                 productId: item.product.id!,
-                quantity: item.quantity
+                quantity: item.quantity,
+                unit: item.unit
             })),
             discount: this.discount,
             paidAmount: this.paidAmount
@@ -104,6 +120,12 @@ export class SalesComponent implements OnInit {
         this.discount = 0;
         this.paidAmount = 0;
         // Refresh products to update stock
-        this.apiService.getProducts().subscribe(data => this.products = data);
+        this.apiService.getProducts().subscribe(data => {
+            this.products = data.map(p => ({
+                ...p,
+                selQuantity: 0,
+                selUnit: 'BAG'
+            }));
+        });
     }
 }

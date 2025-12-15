@@ -42,18 +42,40 @@ public class SalesService {
                 throw new RuntimeException("Insufficient inventory for product: " + product.getName());
             }
 
+            double quantityToDeduct = itemRequest.getQuantity();
+            double priceForThisItem = product.getPrice(); // Default to Bag price
+
+            if ("KG".equalsIgnoreCase(itemRequest.getUnit())) {
+                // 1 Bag = 26 KG
+                // Deduct in terms of bags
+                quantityToDeduct = itemRequest.getQuantity() / 26.0;
+
+                // Price per KG = Price per Bag / 26
+                priceForThisItem = product.getPrice() / 26.0;
+            }
+
+            // Check inventory again with converted quantity if needed, or just rely on the
+            // deduct logic
+            if (product.getQuantity() < quantityToDeduct) {
+                throw new RuntimeException("Insufficient inventory for product: " + product.getName());
+            }
+
             // Deduct inventory
-            product.setQuantity(product.getQuantity() - itemRequest.getQuantity());
+            product.setQuantity(product.getQuantity() - quantityToDeduct);
             productRepository.save(product);
 
             SaleItem saleItem = new SaleItem();
             saleItem.setProduct(product);
-            saleItem.setQuantity(itemRequest.getQuantity());
-            saleItem.setPriceAtSale(product.getPrice());
+            saleItem.setQuantity(itemRequest.getQuantity()); // Store the requested quantity (e.g., 5 KG)
+            saleItem.setUnit(itemRequest.getUnit());
+            // Store the effective price for the unit sold. If sold in KG, store price per
+            // KG.
+            saleItem.setPriceAtSale(priceForThisItem);
             saleItem.setSale(sale);
 
             saleItems.add(saleItem);
-            totalAmount += (product.getPrice() * itemRequest.getQuantity());
+            // Total amount logic: quantity * price_per_unit
+            totalAmount += (priceForThisItem * itemRequest.getQuantity());
         }
 
         sale.setItems(saleItems);

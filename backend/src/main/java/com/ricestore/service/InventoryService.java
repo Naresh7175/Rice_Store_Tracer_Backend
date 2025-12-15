@@ -19,16 +19,20 @@ public class InventoryService {
         if (existingProduct.isPresent()) {
             Product p = existingProduct.get();
             p.setQuantity(p.getQuantity() + product.getQuantity());
-            // Update price if needed, or keep old? Usually new stock might have new price.
-            // For now, let's update price to the new one if provided, or keep old if 0.
             if (product.getPrice() > 0) {
                 p.setPrice(product.getPrice());
+            }
+            if (product.getImage() != null && !product.getImage().isEmpty()) {
+                p.setImage(product.getImage());
             }
             return productRepository.save(p);
         } else {
             return productRepository.save(product);
         }
     }
+
+    // Removed uploadImage methods as we are now storing Base64 images directly in
+    // DB
 
     public List<Product> getAllProducts() {
         return productRepository.findAll();

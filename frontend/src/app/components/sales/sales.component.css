@@ -1,60 +1,174 @@
-.container {
-    padding: 20px;
+/* =========================
+   MAIN SALES LAYOUT
+   ========================= */
+.sales-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
 }
 
-.sale-form {
-    max-width: 800px;
-    margin: 0 auto;
+.item-selection,
+.customer-selection {
+    margin-bottom: 2rem;
 }
 
-.form-group {
-    margin-bottom: 15px;
+/* =========================
+   PRODUCT GRID
+   ========================= */
+.product-list-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
+/* =========================
+   PRODUCT CARD
+   ========================= */
+.product-list-item {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.6rem;
+    background: var(--bg-color);
 }
 
-.add-item-box {
-    background: #f0f0f0;
-    padding: 15px;
-    border-radius: 5px;
-    margin-bottom: 20px;
+/* =========================
+   FORCE CARD ROW (LEFT–RIGHT)
+   ========================= */
+.product-card-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch;
+    gap: 0.75rem;
+}
+
+/* =========================
+   IMAGE (LEFT ONLY)
+   ========================= */
+.p-img-left {
+    width: 90px;
+    min-width: 90px;
+    background: #f8fafc;
+    border-radius: var(--radius-md);
     display: flex;
-    gap: 10px;
     align-items: center;
+    justify-content: center;
 }
 
-table {
+/* IMAGE ITSELF */
+.product-thumb-large {
     width: 100%;
-    margin-bottom: 20px;
-    border-collapse: collapse;
+    height: 100%;
+    max-height: 120px;
+    object-fit: contain;
 }
 
-th,
-td {
-    border: 1px solid #ddd;
-    padding: 8px;
+/* =========================
+   CONTENT (RIGHT ONLY)
+   ========================= */
+.product-content-right {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1;
+    gap: 0.35rem;
 }
 
-.totals {
-    text-align: right;
-    background: #e8f5e9;
-    padding: 20px;
-    border-radius: 5px;
+/* =========================
+   PRODUCT INFO
+   ========================= */
+.p-info-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
 }
 
-.submit-btn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
+.p-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.p-brand {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.p-stock {
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.p-stock.low {
+    color: #ef4444;
+}
+
+/* =========================
+   CONTROLS
+   ========================= */
+.p-price {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.controls-grid {
+    display: flex !important;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* Unit Toggle */
+.unit-toggle-small {
+    display: flex;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.unit-toggle-small button {
     border: none;
-    border-radius: 5px;
+    padding: 0.25rem 0.5rem;
+    background: var(--bg-color);
     cursor: pointer;
-    font-size: 16px;
+    font-size: 0.7rem;
+    font-weight: 500;
 }
 
-.submit-btn:hover {
-    background-color: #45a049;
+.unit-toggle-small button.active {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+/* Quantity */
+.qty-input-small {
+    width: 55px;
+    padding: 0.25rem;
+    text-align: center;
+}
+
+/* Add Button */
+.product-content-right .btn {
+    margin-top: 0.25rem;
+    width: 100%;
+}
+
+/* =========================
+   TOTALS / PAYMENT
+   ========================= */
+.totals-card {
+    position: sticky;
+    top: 1rem;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.grand-total {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    border-top: 1px solid var(--border-color);
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
 }

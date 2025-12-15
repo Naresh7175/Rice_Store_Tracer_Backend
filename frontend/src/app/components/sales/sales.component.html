@@ -1,60 +1,158 @@
 <div class="container">
     <h2>New Sale</h2>
 
-    <div class="sale-form">
-        <div class="form-group">
-            <label>Customer:</label>
-            <select [(ngModel)]="selectedCustomerId">
-                <option [ngValue]="null">Select Customer</option>
-                <option *ngFor="let c of customers" [value]="c.id">{{ c.name }}</option>
-            </select>
+    <div class="sales-grid">
+        <div class="main-column">
+
+            <!-- Customer Selection -->
+            <div class="card customer-selection">
+                <h3>Select Customer</h3>
+                <div class="form-group">
+                    <select [(ngModel)]="selectedCustomerId">
+                        <option [ngValue]="null">-- Choose Customer --</option>
+                        <option *ngFor="let customer of customers" [ngValue]="customer.id">
+                            {{ customer.name }} - {{ customer.phone }}
+                            (Debt: {{ customer.totalDebt | currency:'INR' }})
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Item Selection -->
+            <div class="card item-selection">
+                <h3>Add Items</h3>
+
+                <!-- Product Grid -->
+                <div class="product-list-container">
+                    <div class="product-list-item" *ngFor="let product of products">
+
+                        <!-- ROW CONTAINER -->
+                        <div class="product-card-row">
+
+                            <!-- LEFT : IMAGE ONLY -->
+                            <div class="p-img-left">
+                                <img [src]="product.image || 'assets/placeholder-rice.png'" alt="Product"
+                                    class="product-thumb-large" />
+                            </div>
+
+                            <!-- RIGHT : EVERYTHING ELSE -->
+                            <div class="product-content-right">
+
+                                <!-- INFO -->
+                                <div class="p-info-row">
+                                    <h4 class="p-name">{{ product.name }}</h4>
+                                    <span class="p-brand">{{ product.brand }}</span>
+                                    <span class="p-stock" [class.low]="product.quantity < 10">
+                                        Stock: {{ product.quantity }}
+                                    </span>
+                                </div>
+
+                                <!-- PRICE -->
+                                <span class="p-price">
+                                    {{ product.price | currency:'INR' }}
+                                </span>
+
+                                <!-- CONTROLS -->
+                                <div class="controls-grid">
+                                    <div class="unit-toggle-small">
+                                        <button [class.active]="product.selUnit === 'BAG'"
+                                            (click)="product.selUnit = 'BAG'">
+                                            BAG
+                                        </button>
+                                        <button [class.active]="product.selUnit === 'KG'"
+                                            (click)="product.selUnit = 'KG'">
+                                            KG
+                                        </button>
+                                    </div>
+
+                                    <input type="number" class="qty-input-small" [(ngModel)]="product.selQuantity"
+                                        min="0" />
+                                </div>
+
+                                <!-- ADD BUTTON -->
+                                <button class="btn btn-sm btn-primary" (click)="addToCart(product)">
+                                    Add to Cart
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cart Table -->
+            <div class="card">
+                <h3>Cart Items</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Unit</th>
+                            <th>Qty</th>
+                            <th>Price/Unit</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of cartItems; let i = index">
+                            <td>{{ item.product.name }}</td>
+                            <td>
+                                <span class="badge badge-success">{{ item.unit }}</span>
+                            </td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.price | currency:'INR' }}</td>
+                            <td>{{ item.total | currency:'INR' }}</td>
+                            <td>
+                                <button class="btn btn-outline" (click)="cartItems.splice(i, 1)">
+                                    <span class="material-icons-round">delete</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="cartItems.length === 0">
+                            <td colspan="6" style="text-align: center; color: var(--text-secondary)">
+                                Cart is empty
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <div class="add-item-box">
-            <h3>Add Item</h3>
-            <select [(ngModel)]="selectedProductId">
-                <option [ngValue]="null">Select Product</option>
-                <option *ngFor="let p of products" [value]="p.id">{{ p.name }} - {{ p.brand }} (Stock: {{ p.quantity }})
-                </option>
-            </select>
-            <input type="number" [(ngModel)]="selectedQuantity" min="1" placeholder="Qty">
-            <button (click)="addToCart()">Add</button>
-        </div>
+        <!-- Sidebar -->
+        <div class="sidebar-column">
+            <div class="card totals-card">
+                <h3>Payment Details</h3>
 
-        <h3>Cart</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Price</th>
-                    <th>Qty</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of cartItems">
-                    <td>{{ item.product.name }} - {{ item.product.brand }}</td>
-                    <td>{{ item.product.price | currency:'INR' }}</td>
-                    <td>{{ item.quantity }}</td>
-                    <td>{{ item.total | currency:'INR' }}</td>
-                </tr>
-            </tbody>
-        </table>
+                <div class="total-row">
+                    <span>Subtotal:</span>
+                    <span>{{ totalAmount | currency:'INR' }}</span>
+                </div>
 
-        <div class="totals">
-            <p>Total: {{ totalAmount | currency:'INR' }}</p>
-            <div class="form-group">
-                <label>Discount:</label>
-                <input type="number" [(ngModel)]="discount">
+                <div class="form-group">
+                    <label>Discount</label>
+                    <input type="number" [(ngModel)]="discount" min="0">
+                </div>
+
+                <div class="total-row grand-total">
+                    <span>Total:</span>
+                    <span>{{ finalAmount | currency:'INR' }}</span>
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label>Paid Amount</label>
+                    <input type="number" [(ngModel)]="paidAmount" min="0">
+                </div>
+
+                <div class="total-row" style="color: #ef4444; font-weight: 600;">
+                    <span>Balance (Debt):</span>
+                    <span>{{ balance | currency:'INR' }}</span>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" (click)="submitSale()">
+                    Complete Sale
+                </button>
             </div>
-            <p>Final Amount: {{ finalAmount | currency:'INR' }}</p>
-            <div class="form-group">
-                <label>Paid Amount:</label>
-                <input type="number" [(ngModel)]="paidAmount">
-            </div>
-            <p>Balance (Debt): {{ balance | currency:'INR' }}</p>
-
-            <button class="submit-btn" (click)="submitSale()">Complete Sale</button>
         </div>
     </div>
 </div>

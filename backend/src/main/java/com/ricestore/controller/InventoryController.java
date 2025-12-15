@@ -29,4 +29,7 @@ public class InventoryController {
     public Product getProduct(@PathVariable Long id) {
         return inventoryService.getProduct(id);
     }
+
+    // Upload endpoint removed as image is now part of Product model
+
 }

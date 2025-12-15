@@ -1,28 +1,82 @@
-.container {
-    padding: 20px;
-    text-align: center;
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
 }
 
-.actions {
-    margin-bottom: 30px;
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all 0.2s;
 }
 
-button {
-    margin: 0 10px;
-    padding: 10px 20px;
-    font-size: 16px;
+.stat-card.clickable {
     cursor: pointer;
 }
 
-.result {
-    background: #e3f2fd;
-    padding: 30px;
-    border-radius: 10px;
-    display: inline-block;
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
 }
 
-.amount {
-    font-size: 32px;
-    font-weight: bold;
-    color: #1976d2;
+.stat-card.active-card {
+    border-color: var(--primary-color);
+    background-color: #ecfdf5;
+}
+
+.icon-box {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.icon-revenue {
+    background-color: #d1fae5;
+    color: #059669;
+}
+
+.icon-bags {
+    background-color: #dbeafe;
+    color: #2563eb;
+}
+
+.icon-pending {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+.stat-content h3 {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-top: 0.25rem;
+    display: block;
+}
+
+.filter-section {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Material Icons override for size in cards */
+.stat-card .material-icons-round {
+    font-size: 1.75rem;
 }

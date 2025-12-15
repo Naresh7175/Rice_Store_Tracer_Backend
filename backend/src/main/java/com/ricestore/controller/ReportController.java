@@ -13,7 +13,21 @@ public class ReportController {
     private ReportService reportService;
 
     @GetMapping("/revenue")
-    public Double getRevenue(@RequestParam String period) {
-        return reportService.getRevenue(period);
+    public Double getRevenue(@RequestParam String period,
+            @RequestParam(required = false) Integer month,
+            @RequestParam(required = false) Integer year) {
+        return reportService.getRevenue(period, month, year);
+    }
+
+    @GetMapping("/sales")
+    public java.util.List<com.ricestore.model.Sale> getSales(@RequestParam String period,
+            @RequestParam(required = false) Integer month,
+            @RequestParam(required = false) Integer year) {
+        return reportService.getSales(period, month, year);
+    }
+
+    @GetMapping("/dashboard")
+    public java.util.Map<String, Object> getDashboardStats() {
+        return reportService.getDashboardStats();
     }
 }

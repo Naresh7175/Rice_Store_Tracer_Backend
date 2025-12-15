@@ -12,12 +12,14 @@ import { ApiService, Product } from '../../services/api.service';
 })
 export class InventoryComponent implements OnInit {
     products: Product[] = [];
+    showForm: boolean = false;
     newProduct: Product = {
         name: '',
         brand: '',
         quantity: 0,
         price: 0,
-        description: ''
+        description: '',
+        image: ''
     };
 
     constructor(private apiService: ApiService) { }
@@ -32,10 +34,31 @@ export class InventoryComponent implements OnInit {
         });
     }
 
+    toggleForm() {
+        this.showForm = !this.showForm;
+    }
+
+    onFileSelected(event: any) {
+        const file: File = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e: any) => {
+                this.newProduct.image = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
     addProduct() {
         this.apiService.addProduct(this.newProduct).subscribe(data => {
             this.loadProducts();
-            this.newProduct = { name: '', brand: '', quantity: 0, price: 0, description: '' };
+            this.newProduct = { name: '', brand: '', quantity: 0, price: 0, description: '', image: '' };
+            this.showForm = false; // Close form after adding
         });
+    }
+
+    // getImage helper not needed if we use Base64 directly in src
+    getImage(product: Product): string {
+        return product.image || 'assets/placeholder-rice.png';
     }
 }

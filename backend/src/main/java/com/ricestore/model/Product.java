@@ -12,7 +12,11 @@ public class Product {
 
     private String name;
     private String brand;
-    private int quantity; // Number of bags
+    private double quantity; // Number of bags (can be decimal for kg logic)
     private double price; // Price per bag
     private String description;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String image;
 }

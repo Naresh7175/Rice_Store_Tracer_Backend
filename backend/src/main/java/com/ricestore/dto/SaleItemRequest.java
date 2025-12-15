@@ -5,5 +5,6 @@ import lombok.Data;
 @Data
 public class SaleItemRequest {
     private Long productId;
-    private int quantity;
+    private double quantity;
+    private String unit;
 }

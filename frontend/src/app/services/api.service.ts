@@ -9,6 +9,7 @@ export interface Product {
     quantity: number;
     price: number;
     description?: string;
+    image?: string;
 }
 
 export interface Customer {
@@ -22,6 +23,7 @@ export interface Customer {
 export interface SaleItemRequest {
     productId: number;
     quantity: number;
+    unit?: string;
 }
 
 export interface SaleRequest {
@@ -63,7 +65,23 @@ export class ApiService {
     }
 
     // Reports
-    getRevenue(period: string): Observable<number> {
-        return this.http.get<number>(`${this.baseUrl}/reports/revenue?period=${period}`);
+    getRevenue(period: string, month?: number, year?: number): Observable<number> {
+        let url = `${this.baseUrl}/reports/revenue?period=${period}`;
+        if (month) url += `&month=${month}`;
+        if (year) url += `&year=${year}`;
+        return this.http.get<number>(url);
     }
+
+    getSales(period: string, month?: number, year?: number): Observable<any[]> {
+        let url = `${this.baseUrl}/reports/sales?period=${period}`;
+        if (month) url += `&month=${month}`;
+        if (year) url += `&year=${year}`;
+        return this.http.get<any[]>(url);
+    }
+
+    getDashboardStats(): Observable<any> {
+        return this.http.get<any>(`${this.baseUrl}/reports/dashboard`);
+    }
+
+    // Removed uploadImage mechanism as we use base64 now
 }

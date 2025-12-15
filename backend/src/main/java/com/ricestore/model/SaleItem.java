@@ -18,6 +18,9 @@ public class SaleItem {
     @ManyToOne
     private Product product;
 
-    private int quantity;
+    private double quantity;
     private double priceAtSale;
+
+    // "BAG" or "KG"
+    private String unit;
 }

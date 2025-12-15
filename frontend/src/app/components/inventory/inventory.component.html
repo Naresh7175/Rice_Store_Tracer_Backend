@@ -1,37 +1,83 @@
 <div class="container">
-    <h2>Inventory Management</h2>
+    <div class="header-actions">
+        <h2>Inventory Management</h2>
+        <button class="btn btn-primary btn-icon-only" (click)="toggleForm()">
+            <span class="material-icons-round">{{ showForm ? 'close' : 'add' }}</span>
+            {{ showForm ? 'Close' : 'Add / Update Product' }}
+        </button>
+    </div>
 
-    <div class="add-product-form">
+    <!-- Toggleable Form -->
+    <div class="card form-card" *ngIf="showForm">
         <h3>Add / Update Product</h3>
-        <input type="text" placeholder="Name (e.g. Ponni Rice)" [(ngModel)]="newProduct.name">
-        <input type="text" placeholder="Brand" [(ngModel)]="newProduct.brand">
-        <input type="number" placeholder="Quantity (Bags)" [(ngModel)]="newProduct.quantity">
-        <input type="number" placeholder="Price per Bag" [(ngModel)]="newProduct.price">
-        <input type="text" placeholder="Description" [(ngModel)]="newProduct.description">
-        <button (click)="addProduct()">Add to Inventory</button>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Product Name</label>
+                <input type="text" placeholder="e.g. Ponni Rice" [(ngModel)]="newProduct.name">
+            </div>
+            <div class="form-group">
+                <label>Brand</label>
+                <input type="text" placeholder="Brand Name" [(ngModel)]="newProduct.brand">
+            </div>
+            <div class="form-group">
+                <label>Quantity (Bags)</label>
+                <input type="number" placeholder="0" [(ngModel)]="newProduct.quantity">
+            </div>
+            <div class="form-group">
+                <label>Price per Bag</label>
+                <input type="number" placeholder="0.00" [(ngModel)]="newProduct.price">
+            </div>
+            <div class="form-group full-width">
+                <label>Description</label>
+                <input type="text" placeholder="Product details..." [(ngModel)]="newProduct.description">
+            </div>
+            <div class="form-group full-width">
+                <label>Product Image</label>
+                <input type="file" (change)="onFileSelected($event)" accept="image/*">
+                <!-- Preview Base64 Image -->
+                <div *ngIf="newProduct.image" class="image-preview">
+                    <img [src]="newProduct.image" alt="Preview">
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary" (click)="addProduct()">
+            <span class="material-icons-round">check</span> Save Product
+        </button>
     </div>
 
     <h3>Current Stock</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Brand</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let product of products">
-                <td>{{ product.id }}</td>
-                <td>{{ product.name }}</td>
-                <td>{{ product.brand }}</td>
-                <td>{{ product.quantity }}</td>
-                <td>{{ product.price | currency:'INR' }}</td>
-                <td>{{ product.description }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="card table-container">
+        <table class="premium-table">
+            <thead>
+                <tr>
+                    <th style="width: 120px;">Image</th>
+                    <th>Product Details</th>
+                    <th>Stock</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let product of products">
+                    <td>
+                        <div class="product-img-wrapper">
+                            <img [src]="getImage(product)" alt="Product" class="product-thumb-large">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="product-info">
+                            <span class="p-name">{{ product.name }}</span>
+                            <span class="p-brand">{{ product.brand }}</span>
+                            <small class="p-desc">{{ product.description }}</small>
+                        </div>
+                    </td>
+                    <td>
+                        <span [class.low-stock]="product.quantity < 10" class="stock-badge">
+                            {{ product.quantity | number:'1.0-2' }} Bags
+                        </span>
+                    </td>
+                    <td class="price-cell">{{ product.price | currency:'INR' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
