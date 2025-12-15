@@ -1,5 +1,6 @@
 package com.ricestore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,7 +17,6 @@ public class Product {
     private double price; // Price per bag
     private String description;
 
-    @Lob
     @Column(columnDefinition = "TEXT")
     private String image;
 }

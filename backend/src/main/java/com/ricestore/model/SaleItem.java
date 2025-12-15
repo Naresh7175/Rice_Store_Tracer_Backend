@@ -13,6 +13,8 @@ public class SaleItem {
 
     @ManyToOne
     @JsonIgnore
+    @lombok.ToString.Exclude
+    @lombok.EqualsAndHashCode.Exclude
     private Sale sale;
 
     @ManyToOne
