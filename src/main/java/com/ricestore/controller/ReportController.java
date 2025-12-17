@@ -24,9 +24,9 @@ public class ReportController {
     }
 
     @GetMapping("/sales")
-    public java.util.List<com.ricestore.model.Sale> getSales(@RequestParam String period,
-            @RequestParam(required = false) Integer month,
-            @RequestParam(required = false) Integer year) {
+    public java.util.List<com.ricestore.model.Sale> getSales(@RequestParam(required = false) String period,
+        @RequestParam(required = false) Integer month,
+        @RequestParam(required = false) Integer year) {
         return reportService.getSales(period, month, year);
     }
 
